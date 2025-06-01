@@ -6,12 +6,10 @@ import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 import { SplashScreen } from 'expo-router';
 import { initializeApp } from 'firebase/app';
-import { initializeAuth, getReactNativePersistence, browserLocalPersistence } from 'firebase/auth';
+import { getAuth, initializeAuth, browserLocalPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCRVlw-7v5cx7sU6WdS_n1lstt5zxyrYcg",
   authDomain: "fintrack-71f9c.firebaseapp.com",
@@ -22,21 +20,26 @@ const firebaseConfig = {
   measurementId: "G-SP2CKCC92D"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Auth with platform-specific persistence
-export const auth = initializeAuth(app, {
-  persistence: Platform.select({
-    web: browserLocalPersistence,
-    default: getReactNativePersistence(AsyncStorage),
-  }),
-});
+// Gestion conditionnelle de l'authentification
+let auth;
+if (Platform.OS === 'web') {
+  auth = getAuth(app); // Web => utilise localStorage automatiquement
+} else {
+  const { getReactNativePersistence } = require('firebase/auth/react-native');
+  const AsyncStorage = require('@react-native-async-storage/async-storage').default;
+
+  auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(AsyncStorage),
+  });
+}
+
+export { auth };
 
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-// Prevent the splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -51,12 +54,10 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (fontsLoaded || fontError) {
-      // Hide the splash screen once fonts are loaded
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, fontError]);
 
-  // Return null until fonts are loaded to maintain splash screen
   if (!fontsLoaded && !fontError) {
     return null;
   }
