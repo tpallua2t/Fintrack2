@@ -9,7 +9,8 @@ import { getAuth, initializeAuth } from 'firebase/auth';
 import { initializeAuth as initializeAuthNative, getReactNativePersistence } from 'firebase/auth/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+import { getStorage } from 'firebase/storage'
+import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCRVlw-7v5cx7sU6WdS_n1lstt5zxyrYcg",
@@ -39,6 +40,7 @@ export const storage = getStorage(app);
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  useFrameworkReady();
   const [fontsLoaded, fontError] = useFonts({
     'Inter-Regular': Inter_400Regular,
     'Inter-Medium': Inter_500Medium,
