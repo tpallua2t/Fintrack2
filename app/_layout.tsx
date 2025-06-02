@@ -5,7 +5,9 @@ import { StatusBar } from 'expo-status-bar';
 import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 import { SplashScreen } from 'expo-router';
 import { initializeApp } from 'firebase/app';
-import { getAuth, initializeAuth, browserLocalPersistence } from 'firebase/auth';
+import { getAuth, initializeAuth } from 'firebase/auth';
+import { initializeAuth as initializeAuthNative, getReactNativePersistence } from 'firebase/auth/react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
@@ -25,10 +27,7 @@ let auth;
 if (Platform.OS === 'web') {
   auth = getAuth(app);
 } else {
-  const { getReactNativePersistence } = require('firebase/auth/react-native');
-  const AsyncStorage = require('@react-native-async-storage/async-storage').default;
-
-  auth = initializeAuth(app, {
+  auth = initializeAuthNative(app, {
     persistence: getReactNativePersistence(AsyncStorage),
   });
 }
