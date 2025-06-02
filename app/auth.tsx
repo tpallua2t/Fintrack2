@@ -147,7 +147,7 @@ export default function Auth() {
               disabled={loading}
             >
               {loading ? (
-                <ActivityIndicator size="small\" color="#121212" />
+                <ActivityIndicator size="small" color="#121212" />
               ) : (
                 <Text style={styles.submitButtonText}>
                   {isLogin ? 'Sign In' : 'Sign Up'}
