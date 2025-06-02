@@ -5,12 +5,9 @@ import { StatusBar } from 'expo-status-bar';
 import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 import { SplashScreen } from 'expo-router';
 import { initializeApp } from 'firebase/app';
-import { getAuth, initializeAuth } from 'firebase/auth';
-import { initializeAuth as initializeAuthNative, getReactNativePersistence } from 'firebase/auth/react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getAuth, initializeAuth, browserLocalPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage'
-import { useFrameworkReady } from '@/hooks/useFrameworkReady';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCRVlw-7v5cx7sU6WdS_n1lstt5zxyrYcg",
@@ -28,8 +25,11 @@ let auth;
 if (Platform.OS === 'web') {
   auth = getAuth(app);
 } else {
-  auth = initializeAuthNative(app, {
-    persistence: getReactNativePersistence(AsyncStorage)
+  const { getReactNativePersistence } = require('firebase/auth/react-native');
+  const AsyncStorage = require('@react-native-async-storage/async-storage').default;
+
+  auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(AsyncStorage),
   });
 }
 
@@ -40,7 +40,6 @@ export const storage = getStorage(app);
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  useFrameworkReady();
   const [fontsLoaded, fontError] = useFonts({
     'Inter-Regular': Inter_400Regular,
     'Inter-Medium': Inter_500Medium,
