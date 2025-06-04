@@ -1,7 +1,7 @@
 {
   "name": "fintrack-app",
-  "main": "expo-router/entry",
   "version": "1.0.0",
+  "main": "expo-router/entry",
   "private": true,
   "scripts": {
     "start": "expo start",
@@ -11,15 +11,14 @@
     "expo": "~50.0.0",
     "expo-router": "~5.0.2",
     "expo-web-browser": "~12.5.0",
-    "firebase": "^10.5.2",
+    "firebase": "10.5.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "0.73.1",
-    "react-native-web": "0.20.0"
+    "react-native": "0.73.4",
+    "react-native-web": "~0.20.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@types/react": "~19.0.10",
-    "typescript": "~5.8.3"
+    "@babel/core": "^7.25.0",
+    "typescript": "^5.2.2"
   }
 }
